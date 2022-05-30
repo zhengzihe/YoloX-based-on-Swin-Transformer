@@ -1,5 +1,10 @@
 ## YOLOX：You Only Look Once目标检测模型在Pytorch当中的实现
 ---
+# 感谢B导的源代码以及太阳花的小绿豆的源代码
+# 本仓库是将backbone修改为swin transformer的项目
+# 可以进行训练以及预测
+# 代码的修改部分都在nets/文件下
+# 祝各位同学学习愉快
 
 ## 目录
 1. [仓库更新 Top News](#仓库更新)
