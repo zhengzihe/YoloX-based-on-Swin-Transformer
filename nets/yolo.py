@@ -109,7 +109,9 @@ class YOLOPAFPN(nn.Module):
         # 注意力机制
         self.cbam1 = CBAM(c1 = int(in_channels[1] * width))
         self.cbam2 = CBAM(c1 = int(in_channels[0] * width))
-
+        self.cbam3 = CBAM(c1 = int(in_channels[0] * width))
+        self.cbam4 = CBAM(c1 = int(in_channels[1] * width))
+        
         #-------------------------------------------#
         #   20, 20, 1024 -> 20, 20, 512
         #-------------------------------------------#
@@ -246,7 +248,7 @@ class YOLOPAFPN(nn.Module):
         #   80, 80, 256 -> 40, 40, 256
         #-------------------------------------------#
         P3_downsample   = self.bu_conv2(P3_out)
-        P3_downsample = self.cbam2(P3_downsample)
+        P3_downsample = self.cbam3(P3_downsample)
         #-------------------------------------------#
         #   40, 40, 256 + 40, 40, 256 -> 40, 40, 512
         #-------------------------------------------#
@@ -261,7 +263,7 @@ class YOLOPAFPN(nn.Module):
         #   40, 40, 512 -> 20, 20, 512
         #-------------------------------------------#
         P4_downsample   = self.bu_conv1(P4_out)
-        P4_downsample = self.cbam1(P4_downsample)
+        P4_downsample = self.cbam4(P4_downsample)
         #-------------------------------------------#
         #   20, 20, 512 + 20, 20, 512 -> 20, 20, 1024
         #-------------------------------------------#
