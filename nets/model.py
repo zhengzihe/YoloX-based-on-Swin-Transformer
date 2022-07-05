@@ -611,7 +611,7 @@ class SwinTransformer(nn.Module):
         feature8x, H, W = self.layer1(feature4x, H, W)
         feature16x, H, W = self.layer2(feature8x, H, W)
         feature32x, H, W = self.layer3(feature16x, H, W)
-        feature64x, H, W = self.layer4(feature32x, H, W)
+        feature32x2, H, W = self.layer4(feature32x, H, W)
 
 
 
@@ -619,7 +619,7 @@ class SwinTransformer(nn.Module):
         # x = self.avgpool(x.transpose(1, 2))  # [B, C, 1]
         # x = torch.flatten(x, 1)
         # x = self.head(x)
-        return feature4x, feature8x, feature16x, feature32x, feature64x
+        return feature4x, feature8x, feature16x, feature32x, feature32x2
 
 
 
