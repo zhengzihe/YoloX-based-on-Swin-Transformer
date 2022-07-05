@@ -187,7 +187,7 @@ class YOLOPAFPN(nn.Module):
 
 
     def forward(self, input):
-        feature4x, feature8x, feature16x, feature32x, feature64x = self.backbone.forward(input)
+        feature4x, feature8x, feature16x, feature32x, feature32x2 = self.backbone.forward(input)
         # print("orignalfeature32size:", feature32x.size())
         # print("orignalfeature16size:", feature16x.size())
         # print("orignalfeature8size:", feature8x.size())
