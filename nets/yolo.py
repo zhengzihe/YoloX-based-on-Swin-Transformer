@@ -100,7 +100,8 @@ class YOLOPAFPN(nn.Module):
         super().__init__()
         Conv                = DWConv if depthwise else BaseConv
         # 修改
-        self.backbone       = swin_base_patch4_window7_224()
+        self.backbone = swin_base_patch4_window7_224()
+        self.embed_dim = swin_base_patch4_window7_224().embed_dim
 
         self.in_features    = in_features
 
@@ -181,25 +182,32 @@ class YOLOPAFPN(nn.Module):
             act = act,
         )
 
-        self.feature32x2feat3 = nn.Conv2d(1024, int(in_channels[2] * width), kernel_size=1)
-        self.feature16x2feat2 = nn.Conv2d(512, int(in_channels[1] * width), kernel_size=1)
-        self.feature8x2feat1 = nn.Conv2d(256, int(in_channels[0] * width), kernel_size=1)
+        self.feature32x2feat3 = nn.Conv2d(self.embed_dim * 8, int(in_channels[2] * width), kernel_size=1)
+        self.feature16x2feat2 = nn.Conv2d(self.embed_dim * 4, int(in_channels[1] * width), kernel_size=1)
+        self.feature8x2feat1 = nn.Conv2d(self.embed_dim * 2, int(in_channels[0] * width), kernel_size=1)
 
 
     def forward(self, input):
         feature4x, feature8x, feature16x, feature32x, feature32x2 = self.backbone.forward(input)
+        # print("orignalfeature32x2size:", feature32x2.size())
         # print("orignalfeature32size:", feature32x.size())
         # print("orignalfeature16size:", feature16x.size())
         # print("orignalfeature8size:", feature8x.size())
+        # print("orignalfeature4size:", feature4x.size())
+
+        channel_feature32 = feature32x.size()[2]
+        channel_feature16 = feature16x.size()[2]
+        channel_feature8 = feature8x.size()[2]
+
         feature32x_sqrt = int(math.sqrt(feature32x.size()[1]))
         feature16x_sqrt = int(math.sqrt(feature16x.size()[1]))
         feature8x_sqrt = int(math.sqrt(feature8x.size()[1]))
 
-        feature32x = feature32x.permute(0, 2, 1).contiguous().view(-1, 1024, feature32x_sqrt, feature32x_sqrt)
+        feature32x = feature32x.permute(0, 2, 1).contiguous().view(-1, channel_feature32, feature32x_sqrt, feature32x_sqrt)
         # print("after reshape feature32:", feature32x.size())
-        feature16x = feature16x.permute(0, 2, 1).contiguous().view(-1, 512, feature16x_sqrt, feature16x_sqrt)
+        feature16x = feature16x.permute(0, 2, 1).contiguous().view(-1, channel_feature16, feature16x_sqrt, feature16x_sqrt)
         # print("after reshape feature16:", feature16x.size())
-        feature8x = feature8x.permute(0, 2, 1).contiguous().view(-1, 256, feature8x_sqrt, feature8x_sqrt)
+        feature8x = feature8x.permute(0, 2, 1).contiguous().view(-1, channel_feature8, feature8x_sqrt, feature8x_sqrt)
         # print("after reshpae feature8:", feature8x.size())
 
         feat3 = self.feature32x2feat3(feature32x)
