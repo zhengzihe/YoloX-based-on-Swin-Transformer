@@ -4,8 +4,8 @@
 ### 具体修改部分及训练参考见https://blog.csdn.net/shayinzzh/article/details/125040067
 ### 预训练权重下载地址
 #### 针对phi = 'l'
-链接：https://pan.baidu.com/s/1NB9J5KtGPq1BIsQNIzGaSA 
-提取码：3p71 
+链接：https://pan.baidu.com/s/1FX6wMvcfE674UZYp4j8OCA 
+提取码：d4c8 
 ### 带注意力机制的FPN层
 # 祝各位同学学习愉快
 
